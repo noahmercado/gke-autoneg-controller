@@ -55,6 +55,7 @@ locals {
 }
 
 resource "google_project_iam_custom_role" "autoneg" {
+  count   = var.workload_identity != null ? 1 : 0
   project     = var.project_id
   role_id     = var.regional ? "autonegRegional" : "autonegZonal"
   title       = "${var.regional ? "Regional" : "Zonal"} AutoNEG role"
@@ -65,7 +66,7 @@ resource "google_project_iam_custom_role" "autoneg" {
 resource "google_project_iam_member" "autoneg" {
   count   = var.workload_identity != null ? 1 : 0
   project = var.project_id
-  role    = google_project_iam_custom_role.autoneg.id
+  role    = google_project_iam_custom_role.autoneg[0].id
   member  = "serviceAccount:${google_service_account.autoneg[0].email}"
 }
 

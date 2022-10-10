@@ -22,5 +22,5 @@ output "service_account" {
 }
 
 output "autoneg_custom_role" {
-  value = google_project_iam_custom_role.autoneg
+  value = var.workload_identity != null ? google_project_iam_custom_role.autoneg[0] : null
 }
